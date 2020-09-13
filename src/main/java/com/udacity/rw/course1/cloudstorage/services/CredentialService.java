@@ -22,6 +22,7 @@ public class CredentialService {
   public List<Credential> getAllCredentials(int credentialId) {
     List<Credential> credentialList = credentialMapper.getAllCredentials(credentialId);
 
+    // Need to grab the decrypted passwords because they may need to be displayed.
     for(Credential credential : credentialList){
       credential.setDecryptedPassword(encryptionService.decryptValue(credential.getPassword(),credential.getKey()));
     }
