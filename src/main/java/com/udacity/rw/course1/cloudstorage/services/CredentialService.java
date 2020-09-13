@@ -30,7 +30,9 @@ public class CredentialService {
     return credentialList;
   }
 
-  public void insertCredential(Credential credential) {
+  public int insertCredential(Credential credential) {
+    int id;
+
     // Need to create a key and encrypt the password.
     SecureRandom random = new SecureRandom();
     byte[] key = new byte[16];
@@ -44,11 +46,12 @@ public class CredentialService {
     credential.setKey(encodedKey);
 
     if(credential.getCredentialId() == null){
-      credentialMapper.insertCredential(credential);
+      id = credentialMapper.insertCredential(credential);
     }
     else{ // an id exists so we are just editing an existing credential
-      credentialMapper.updateCredential(credential);
+      id = credentialMapper.updateCredential(credential);
     }
+    return id;
   }
 
   public void deleteCredential(int id){

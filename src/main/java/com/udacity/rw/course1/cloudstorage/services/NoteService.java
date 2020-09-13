@@ -19,13 +19,15 @@ public class NoteService {
     return noteMapper.getAllNotes(userId);
   }
 
-  public void insertNote(Note note){
+  public int insertNote(Note note){
+    int id;
     if(note.getNoteId() == null){
-      noteMapper.insertNote(note);
+      id = noteMapper.insertNote(note);
     }
     else{ // an existing note id means we just want to update a current note.
-      noteMapper.updateNote(note);
+      id = noteMapper.updateNote(note);
     }
+    return id;
   }
 
   public void deleteNote(int id){

@@ -32,15 +32,20 @@ public class NoteController {
     // set the id for the currently logged in user.
     note.setUserId(userService.getLoggedInUserId(auth));
 
-    noteService.insertNote(note);
+    Boolean isSuccess =  noteService.insertNote(note) > 0;
 
-    return "redirect:/home";
+    return "redirect:/result?isSuccess=" + isSuccess;
   }
 
   @GetMapping("/delete")
   public String deleteNote(@RequestParam("id") int id){
-    noteService.deleteNote(id);
-    return "redirect:/home";
+    boolean isSuccess = id > 0;
+
+    if(isSuccess) {
+      noteService.deleteNote(id);
+    }
+
+    return "redirect:/result?isSuccess=" + isSuccess;
   }
 
 

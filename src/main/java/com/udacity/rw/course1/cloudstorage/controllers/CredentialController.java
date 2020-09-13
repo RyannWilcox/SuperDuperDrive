@@ -28,14 +28,17 @@ public class CredentialController {
     // Set the id of the currently logged in user.
     credential.setUserId(userService.getLoggedInUserId(auth));
 
-    credentialService.insertCredential(credential);
+    Boolean isSuccess = credentialService.insertCredential(credential) > 0;
 
-    return "redirect:/home";
+    return "redirect:/result?isSuccess=" + isSuccess;
   }
 
   @GetMapping("/delete")
   public String deleteCredential(@RequestParam("id") int id){
-    credentialService.deleteCredential(id);
-    return "redirect:/home";
+    boolean isSuccess = id > 0;
+    if (isSuccess) {
+      credentialService.deleteCredential(id);
+    }
+    return "redirect:/result?isSuccess=" + isSuccess;
   }
 }
