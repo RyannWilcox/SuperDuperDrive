@@ -1,9 +1,11 @@
 package com.udacity.rw.course1.cloudstorage.controllers;
 
 import com.udacity.rw.course1.cloudstorage.models.Credential;
+import com.udacity.rw.course1.cloudstorage.models.File;
 import com.udacity.rw.course1.cloudstorage.models.Note;
 import com.udacity.rw.course1.cloudstorage.models.User;
 import com.udacity.rw.course1.cloudstorage.services.CredentialService;
+import com.udacity.rw.course1.cloudstorage.services.FileService;
 import com.udacity.rw.course1.cloudstorage.services.NoteService;
 import com.udacity.rw.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
@@ -21,11 +23,14 @@ public class HomeController {
   private NoteService noteService;
   private UserService userService;
   private CredentialService credentialService;
+  private FileService fileService;
 
-  public HomeController(NoteService noteService, UserService userService,CredentialService credentialService){
+  public HomeController(NoteService noteService, UserService userService,
+                        CredentialService credentialService,FileService fileService){
      this.noteService = noteService;
      this.userService = userService;
      this.credentialService = credentialService;
+     this.fileService = fileService;
   }
 
   @GetMapping
@@ -49,9 +54,10 @@ public class HomeController {
     List<Credential> credentialList = credentialService.getAllCredentials(id);
     model.addAttribute("credentialList",credentialList);
 
-    // a new file object must be added to the model
-
     // get all the files for the current user and then add it to the model.
+    List<File> fileList = fileService.getAllFiles(id);
+    model.addAttribute("fileList",fileList);
+
     return "home";
   }
 }
