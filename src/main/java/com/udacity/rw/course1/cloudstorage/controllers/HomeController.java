@@ -49,6 +49,9 @@ public class HomeController {
     List<Credential> credentialList = credentialService.getAllCredentials(id);
     model.addAttribute("credentialList",credentialList);
 
+    // a new file object must be added to the model
+
+    // get all the files for the current user and then add it to the model.
     return "home";
   }
 }
