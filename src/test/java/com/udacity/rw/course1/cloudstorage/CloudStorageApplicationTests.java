@@ -15,6 +15,8 @@ class CloudStorageApplicationTests {
 
 	private WebDriver driver;
 
+	private String baseURL;
+
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
@@ -23,6 +25,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		baseURL = "http://localhost:" + port;
 	}
 
 	@AfterEach
@@ -48,11 +51,11 @@ class CloudStorageApplicationTests {
 		/**
 		 * Sign up, login and then make sure the home page is accessible
 		 */
-		driver.get("http://localhost:" + this.port + "/signup");
+		driver.get(baseURL + "/signup");
 		SignupPage signupPage = new SignupPage(driver);
 		signupPage.signup("Ryan","Wilcox","rwilcox","password123");
 
-		driver.get("http://localhost:" + this.port + "/login");
+		driver.get(baseURL + "/login");
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.login("rwilcox","password123");
 
@@ -61,9 +64,10 @@ class CloudStorageApplicationTests {
 		/**
 		 * Logout, attempt to access the home page, it should be inaccessible
 		 */
+		driver.get(baseURL + "/home");
 		HomePage homePage = new HomePage(driver);
 		homePage.logout();
-		driver.get("http://localhost:" + this.port + "/home");
+		driver.get(baseURL + "/home");
 
 		Assertions.assertEquals("Login", driver.getTitle());
 
