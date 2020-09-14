@@ -39,4 +39,8 @@ public class FileService {
   public void deleteFile(int fileId){
     fileMapper.deleteFile(fileId);
   }
+
+  public boolean doesFileExist(MultipartFile fileUpload){
+    return fileMapper.getFileByFileName(fileUpload.getOriginalFilename()) != null;
+  }
 }

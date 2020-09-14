@@ -8,6 +8,9 @@ import java.util.List;
 @Mapper
 public interface FileMapper {
 
+  @Select("SELECT * FROM FILES WHERE filename = #{filename}")
+  File getFileByFileName(String filename);
+
   @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
   File getFile(int fileId);
 
@@ -21,4 +24,5 @@ public interface FileMapper {
 
   @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")
   void deleteFile(int fileId);
+
 }

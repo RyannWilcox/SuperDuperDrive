@@ -42,7 +42,12 @@ public class FileController {
       isSuccess = false;
     }
     else {
-      isSuccess = fileService.insertFile(fileUpload, userService.getLoggedInUserId(auth)) > 0;
+      if(!fileService.doesFileExist(fileUpload)) {
+        isSuccess = fileService.insertFile(fileUpload, userService.getLoggedInUserId(auth)) > 0;
+      }
+      else{
+        isSuccess = false;
+      }
     }
     return "redirect:/result?isSuccess=" + isSuccess;
   }
