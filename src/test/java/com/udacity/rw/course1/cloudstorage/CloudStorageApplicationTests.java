@@ -32,10 +32,41 @@ class CloudStorageApplicationTests {
 		}
 	}
 
+
+	/**
+	 * Attempt to access the homepage without being logged in.
+	 */
 	@Test
-	public void getLoginPage() {
-		driver.get("http://localhost:" + this.port + "/login");
+	public void attemptToAccessUnauthorizedPage() {
+		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	@Test
+	public void signupSignoutAuthorization() {
+
+		/**
+		 * Sign up, login and then make sure the home page is accessible
+		 */
+		driver.get("http://localhost:" + this.port + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Ryan","Wilcox","rwilcox","password123");
+
+		driver.get("http://localhost:" + this.port + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login("rwilcox","password123");
+
+		Assertions.assertEquals("Home",driver.getTitle());
+
+		/**
+		 * Logout, attempt to access the home page, it should be inaccessible
+		 */
+		HomePage homePage = new HomePage(driver);
+		homePage.logout();
+		driver.get("http://localhost:" + this.port + "/home");
+
+		Assertions.assertEquals("Login", driver.getTitle());
+
+
+	}
 }
