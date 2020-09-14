@@ -6,6 +6,7 @@ import com.udacity.rw.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,15 @@ public class FileController {
     }
     else {
       isSuccess = fileService.insertFile(fileUpload, userService.getLoggedInUserId(auth)) > 0;
+    }
+    return "redirect:/result?isSuccess=" + isSuccess;
+  }
+
+  @GetMapping("/delete")
+  public String deleteFile(@RequestParam("id")int id){
+    boolean isSuccess = id > 0;
+    if(isSuccess){
+      fileService.deleteFile(id);
     }
     return "redirect:/result?isSuccess=" + isSuccess;
   }

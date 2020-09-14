@@ -52,7 +52,11 @@
                                 <tr th:each="aFile : ${fileList}">
                                     <td>
                                         <a target="_blank" class="btn btn-success">View</a>
-                                        <a  class="btn btn-danger">Delete</a>
+                                        <a  class="btn btn-danger"
+                                            th:href="@{/file/delete(id=${aFile.fileId})}"
+                                            onClick="if (!(confirm('Are you sure you want to delete this note?'))) return false">
+                                            Delete
+                                        </a>
                                     </td>
                                     <th scope="row" th:text="${aFile.filename}"></th>
                                 </tr>
