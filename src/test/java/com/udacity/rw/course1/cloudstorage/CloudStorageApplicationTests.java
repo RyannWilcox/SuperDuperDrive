@@ -2,8 +2,12 @@ package com.udacity.rw.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -15,6 +19,8 @@ class CloudStorageApplicationTests {
 
 	private WebDriver driver;
 
+	private WebDriverWait wait;
+
 	private String baseURL;
 
 	@BeforeAll
@@ -25,6 +31,8 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		this.wait = new WebDriverWait(driver,10);
+
 		baseURL = "http://localhost:" + port;
 	}
 
@@ -33,6 +41,19 @@ class CloudStorageApplicationTests {
 		if (this.driver != null) {
 			driver.quit();
 		}
+	}
+
+	/**
+	 *
+	 */
+	public void signupAndLogin(){
+		driver.get(baseURL + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Ryan","Wilcox","rwilcox","password123");
+
+		driver.get(baseURL + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login("rwilcox","password123");
 	}
 
 
@@ -51,26 +72,64 @@ class CloudStorageApplicationTests {
 		/**
 		 * Sign up, login and then make sure the home page is accessible
 		 */
-		driver.get(baseURL + "/signup");
-		SignupPage signupPage = new SignupPage(driver);
-		signupPage.signup("Ryan","Wilcox","rwilcox","password123");
-
-		driver.get(baseURL + "/login");
-		LoginPage loginPage = new LoginPage(driver);
-		loginPage.login("rwilcox","password123");
-
+		signupAndLogin();
 		Assertions.assertEquals("Home",driver.getTitle());
 
 		/**
 		 * Logout, attempt to access the home page, it should be inaccessible
 		 */
 		driver.get(baseURL + "/home");
-		HomePage homePage = new HomePage(driver);
+		HomePage homePage = new HomePage(driver,wait);
 		homePage.logout();
 		driver.get(baseURL + "/home");
 
 		Assertions.assertEquals("Login", driver.getTitle());
 
-
 	}
+
+	@Test
+	public void verifyNoteCreation() throws InterruptedException {
+		signupAndLogin();
+		HomePage homePage = new HomePage(driver,wait);
+		homePage.createNote("Test","Testing is fun!");
+		Assertions.assertEquals("Result",driver.getTitle());
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+	}
+
+	@Test
+	public void verifyNoteManipulation() throws InterruptedException {
+		signupAndLogin();
+		HomePage homePage = new HomePage(driver,wait);
+		homePage.createNote("Test","Testing is fun! ");
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.editNote("s","edited");
+		Assertions.assertEquals("Result",driver.getTitle());
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.isNoteEdited();
+	}
+
+	@Test
+	public void verifyNoteDeletion() throws InterruptedException {
+		signupAndLogin();
+		HomePage homePage = new HomePage(driver,wait);
+		homePage.createNote("Test","Testing is fun!");
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.deleteNote();
+		Assertions.assertEquals("Result",driver.getTitle());
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.isNoteDeleted();
+	}
+
 }
