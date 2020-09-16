@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import java.beans.IntrospectionException;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -94,6 +96,12 @@ class CloudStorageApplicationTests {
 		homePage.createNote("Test","Testing is fun!");
 		Assertions.assertEquals("Result",driver.getTitle());
 		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.isNoteVisible();
+
+		homePage.deleteNote();
 	}
 
 	@Test
@@ -112,6 +120,8 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 
 		homePage.isNoteEdited();
+
+		homePage.deleteNote();
 	}
 
 	@Test
@@ -130,6 +140,60 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 
 		homePage.isNoteDeleted();
+	}
+
+	@Test
+	public void verifyCredCreationAndEncryption() throws InterruptedException {
+		signupAndLogin();
+		HomePage homePage = new HomePage(driver,wait);
+		homePage.createCredential("www.google.com","rwilcox","password123");
+
+		Assertions.assertEquals("Result",driver.getTitle());
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.isCredentialVisible();
+
+		homePage.deleteCredential();
+	}
+
+	@Test
+	public void verifyCredentialManipulation() throws InterruptedException {
+		signupAndLogin();
+		HomePage homePage = new HomePage(driver,wait);
+		homePage.createCredential("www.google.com","rwilcox","password123");
+
+		Assertions.assertEquals("Result",driver.getTitle());
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.editCredential("www.yahoo.com","ryan","newpassword");
+
+		driver.get(baseURL + "/home");
+
+		homePage.isCredentialEdited();
+
+		homePage.deleteCredential();
+	}
+
+	@Test
+	public void verifyCredentialDeletion() throws InterruptedException {
+		signupAndLogin();
+		HomePage homePage = new HomePage(driver,wait);
+		homePage.createCredential("www.google.com","rwilcox","password123");
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.deleteCredential();
+		Assertions.assertEquals("Result",driver.getTitle());
+		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+
+		driver.get(baseURL + "/home");
+
+		homePage.isCredentialDeleted();
 	}
 
 }

@@ -25,8 +25,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-      http.authorizeRequests() // TODO: REMOVE THE H2 item at the end
-              .antMatchers("/signup", "/css/**", "/js/**","/h2-console/**").permitAll()
+      http.authorizeRequests()
+              .antMatchers("/signup", "/css/**", "/js/**").permitAll()
               .anyRequest().authenticated();
 
       http.formLogin()
@@ -37,9 +37,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
       http.logout().permitAll();
 
-      //TODO: GET RID OF THIS TOO
-      http.csrf().disable();
-      http.headers().frameOptions().disable();
     }
 
 
