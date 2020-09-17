@@ -22,11 +22,11 @@ public class SignupPage {
   @FindBy(id = "signup-button")
   private WebElement signupButton;
 
-  public SignupPage(WebDriver webDriver){
-    PageFactory.initElements(webDriver,this);
+  public SignupPage(WebDriver webDriver) {
+    PageFactory.initElements(webDriver, this);
   }
 
-  public void signup(String firstName, String lastName, String username,String password){
+  public void signup(String firstName, String lastName, String username, String password) {
     this.firstNameField.sendKeys(firstName);
     this.lastNameField.sendKeys(lastName);
     this.usernameField.sendKeys(username);

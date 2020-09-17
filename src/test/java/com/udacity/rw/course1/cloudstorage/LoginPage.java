@@ -16,11 +16,11 @@ public class LoginPage {
   @FindBy(id = "login-button")
   private WebElement loginButton;
 
-  public LoginPage(WebDriver webDriver){
-    PageFactory.initElements(webDriver,this);
+  public LoginPage(WebDriver webDriver) {
+    PageFactory.initElements(webDriver, this);
   }
 
-  public void login(String username, String password){
+  public void login(String username, String password) {
     this.usernameField.sendKeys(username);
     this.passwordField.sendKeys(password);
     this.loginButton.click();

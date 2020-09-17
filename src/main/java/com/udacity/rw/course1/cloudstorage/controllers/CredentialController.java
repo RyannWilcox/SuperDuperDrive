@@ -24,7 +24,7 @@ public class CredentialController {
   }
 
   @PostMapping("/save")
-  public String createCredential(Authentication auth, Credential credential, Model model){
+  public String createCredential(Authentication auth, Credential credential, Model model) {
     // Set the id of the currently logged in user.
     credential.setUserId(userService.getLoggedInUserId(auth));
 
@@ -34,7 +34,7 @@ public class CredentialController {
   }
 
   @GetMapping("/delete")
-  public String deleteCredential(@RequestParam("id") int id){
+  public String deleteCredential(@RequestParam("id") int id) {
     boolean isSuccess = id > 0;
     if (isSuccess) {
       credentialService.deleteCredential(id);

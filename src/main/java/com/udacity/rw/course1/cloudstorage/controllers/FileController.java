@@ -38,14 +38,12 @@ public class FileController {
                            Authentication auth, Model model) throws IOException {
     boolean isSuccess;
 
-    if(fileUpload.isEmpty()){
+    if (fileUpload.isEmpty()) {
       isSuccess = false;
-    }
-    else {
-      if(!fileService.doesFileExist(fileUpload)) {
+    } else {
+      if (!fileService.doesFileExist(fileUpload)) {
         isSuccess = fileService.insertFile(fileUpload, userService.getLoggedInUserId(auth)) > 0;
-      }
-      else{
+      } else {
         isSuccess = false;
       }
     }
@@ -53,22 +51,22 @@ public class FileController {
   }
 
   @GetMapping("/view")
-  public ResponseEntity<InputStreamResource> viewFile(@RequestParam("id") int id){
+  public ResponseEntity<InputStreamResource> viewFile(@RequestParam("id") int id) {
     File file = fileService.getFile(id);
 
     // grab the file data
     InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(file.getFileData()));
 
     return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION,"attachment:filename=" + file.getFilename())
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment:filename=" + file.getFilename())
             .contentType(MediaType.parseMediaType(file.getContentType()))
             .body(resource);
   }
 
   @GetMapping("/delete")
-  public String deleteFile(@RequestParam("id")int id){
+  public String deleteFile(@RequestParam("id") int id) {
     boolean isSuccess = id > 0;
-    if(isSuccess){
+    if (isSuccess) {
       fileService.deleteFile(id);
     }
     return "redirect:/result?isSuccess=" + isSuccess;

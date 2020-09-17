@@ -13,7 +13,7 @@ public interface CredentialMapper {
 
   @Insert("INSERT INTO CREDENTIALS(url,username,key,password,userid) " +
           " VALUES(#{url},#{username},#{key},#{password},#{userId})")
-  @Options(useGeneratedKeys = true,keyProperty = "credentialId")
+  @Options(useGeneratedKeys = true, keyProperty = "credentialId")
   int insertCredential(Credential credential);
 
   @Update("UPDATE CREDENTIALS " +

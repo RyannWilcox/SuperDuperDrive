@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ResultController {
 
   @GetMapping
-  public String displayResultPage(@RequestParam("isSuccess") boolean isSuccess, Model model){
-    model.addAttribute("success",isSuccess);
+  public String displayResultPage(@RequestParam("isSuccess") boolean isSuccess, Model model) {
+    model.addAttribute("success", isSuccess);
     return "result";
   }
 }

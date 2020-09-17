@@ -11,7 +11,7 @@ public class File {
   public File() {}
 
   public File(int fileId, int userId, String filename,
-              String contentType,String fileSize, byte[] fileData) {
+              String contentType, String fileSize, byte[] fileData) {
     this.fileId = fileId;
     this.userId = userId;
     this.filename = filename;

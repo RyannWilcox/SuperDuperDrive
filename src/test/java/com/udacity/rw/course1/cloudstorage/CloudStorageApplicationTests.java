@@ -16,184 +16,184 @@ import java.beans.IntrospectionException;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
-	@LocalServerPort
-	private int port;
+  @LocalServerPort
+  private int port;
 
-	private WebDriver driver;
+  private WebDriver driver;
 
-	private WebDriverWait wait;
+  private WebDriverWait wait;
 
-	private String baseURL;
+  private String baseURL;
 
-	@BeforeAll
-	static void beforeAll() {
-		WebDriverManager.chromedriver().setup();
-	}
+  @BeforeAll
+  static void beforeAll() {
+    WebDriverManager.chromedriver().setup();
+  }
 
-	@BeforeEach
-	public void beforeEach() {
-		this.driver = new ChromeDriver();
-		this.wait = new WebDriverWait(driver,10);
+  @BeforeEach
+  public void beforeEach() {
+    this.driver = new ChromeDriver();
+    this.wait = new WebDriverWait(driver, 10);
 
-		baseURL = "http://localhost:" + port;
-	}
+    baseURL = "http://localhost:" + port;
+  }
 
-	@AfterEach
-	public void afterEach() {
-		if (this.driver != null) {
-			driver.quit();
-		}
-	}
+  @AfterEach
+  public void afterEach() {
+    if (this.driver != null) {
+      driver.quit();
+    }
+  }
 
-	/**
-	 *
-	 */
-	public void signupAndLogin(){
-		driver.get(baseURL + "/signup");
-		SignupPage signupPage = new SignupPage(driver);
-		signupPage.signup("Ryan","Wilcox","rwilcox","password123");
+  /**
+   *
+   */
+  public void signupAndLogin() {
+    driver.get(baseURL + "/signup");
+    SignupPage signupPage = new SignupPage(driver);
+    signupPage.signup("Ryan", "Wilcox", "rwilcox", "password123");
 
-		driver.get(baseURL + "/login");
-		LoginPage loginPage = new LoginPage(driver);
-		loginPage.login("rwilcox","password123");
-	}
+    driver.get(baseURL + "/login");
+    LoginPage loginPage = new LoginPage(driver);
+    loginPage.login("rwilcox", "password123");
+  }
 
 
-	/**
-	 * Attempt to access the homepage without being logged in.
-	 */
-	@Test
-	public void attemptToAccessUnauthorizedPage() {
-		driver.get("http://localhost:" + this.port + "/home");
-		Assertions.assertEquals("Login", driver.getTitle());
-	}
+  /**
+   * Attempt to access the homepage without being logged in.
+   */
+  @Test
+  public void attemptToAccessUnauthorizedPage() {
+    driver.get("http://localhost:" + this.port + "/home");
+    Assertions.assertEquals("Login", driver.getTitle());
+  }
 
-	@Test
-	public void signupSignoutAuthorization() {
+  @Test
+  public void signupSignoutAuthorization() {
 
-		/**
-		 * Sign up, login and then make sure the home page is accessible
-		 */
-		signupAndLogin();
-		Assertions.assertEquals("Home",driver.getTitle());
+    /**
+     * Sign up, login and then make sure the home page is accessible
+     */
+    signupAndLogin();
+    Assertions.assertEquals("Home", driver.getTitle());
 
-		/**
-		 * Logout, attempt to access the home page, it should be inaccessible
-		 */
-		driver.get(baseURL + "/home");
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.logout();
-		driver.get(baseURL + "/home");
+    /**
+     * Logout, attempt to access the home page, it should be inaccessible
+     */
+    driver.get(baseURL + "/home");
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.logout();
+    driver.get(baseURL + "/home");
 
-		Assertions.assertEquals("Login", driver.getTitle());
+    Assertions.assertEquals("Login", driver.getTitle());
 
-	}
+  }
 
-	@Test
-	public void verifyNoteCreation() throws InterruptedException {
-		signupAndLogin();
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.createNote("Test","Testing is fun!");
-		Assertions.assertEquals("Result",driver.getTitle());
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+  @Test
+  public void verifyNoteCreation() throws InterruptedException {
+    signupAndLogin();
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.createNote("Test", "Testing is fun!");
+    Assertions.assertEquals("Result", driver.getTitle());
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.isNoteVisible();
+    homePage.isNoteVisible();
 
-		homePage.deleteNote();
-	}
+    homePage.deleteNote();
+  }
 
-	@Test
-	public void verifyNoteManipulation() throws InterruptedException {
-		signupAndLogin();
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.createNote("Test","Testing is fun! ");
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+  @Test
+  public void verifyNoteManipulation() throws InterruptedException {
+    signupAndLogin();
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.createNote("Test", "Testing is fun! ");
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.editNote("s","edited");
-		Assertions.assertEquals("Result",driver.getTitle());
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+    homePage.editNote("s", "edited");
+    Assertions.assertEquals("Result", driver.getTitle());
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.isNoteEdited();
+    homePage.isNoteEdited();
 
-		homePage.deleteNote();
-	}
+    homePage.deleteNote();
+  }
 
-	@Test
-	public void verifyNoteDeletion() throws InterruptedException {
-		signupAndLogin();
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.createNote("Test","Testing is fun!");
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+  @Test
+  public void verifyNoteDeletion() throws InterruptedException {
+    signupAndLogin();
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.createNote("Test", "Testing is fun!");
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.deleteNote();
-		Assertions.assertEquals("Result",driver.getTitle());
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+    homePage.deleteNote();
+    Assertions.assertEquals("Result", driver.getTitle());
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.isNoteDeleted();
-	}
+    homePage.isNoteDeleted();
+  }
 
-	@Test
-	public void verifyCredCreationAndEncryption() throws InterruptedException {
-		signupAndLogin();
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.createCredential("www.google.com","rwilcox","password123");
+  @Test
+  public void verifyCredCreationAndEncryption() throws InterruptedException {
+    signupAndLogin();
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.createCredential("www.google.com", "rwilcox", "password123");
 
-		Assertions.assertEquals("Result",driver.getTitle());
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+    Assertions.assertEquals("Result", driver.getTitle());
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.isCredentialVisible();
+    homePage.isCredentialVisible();
 
-		homePage.deleteCredential();
-	}
+    homePage.deleteCredential();
+  }
 
-	@Test
-	public void verifyCredentialManipulation() throws InterruptedException {
-		signupAndLogin();
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.createCredential("www.google.com","rwilcox","password123");
+  @Test
+  public void verifyCredentialManipulation() throws InterruptedException {
+    signupAndLogin();
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.createCredential("www.google.com", "rwilcox", "password123");
 
-		Assertions.assertEquals("Result",driver.getTitle());
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+    Assertions.assertEquals("Result", driver.getTitle());
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.editCredential("www.yahoo.com","ryan","newpassword");
+    homePage.editCredential("www.yahoo.com", "ryan", "newpassword");
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.isCredentialEdited();
+    homePage.isCredentialEdited();
 
-		homePage.deleteCredential();
-	}
+    homePage.deleteCredential();
+  }
 
-	@Test
-	public void verifyCredentialDeletion() throws InterruptedException {
-		signupAndLogin();
-		HomePage homePage = new HomePage(driver,wait);
-		homePage.createCredential("www.google.com","rwilcox","password123");
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+  @Test
+  public void verifyCredentialDeletion() throws InterruptedException {
+    signupAndLogin();
+    HomePage homePage = new HomePage(driver, wait);
+    homePage.createCredential("www.google.com", "rwilcox", "password123");
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.deleteCredential();
-		Assertions.assertEquals("Result",driver.getTitle());
-		Assertions.assertEquals("Success",driver.findElement(By.id("success")).getText());
+    homePage.deleteCredential();
+    Assertions.assertEquals("Result", driver.getTitle());
+    Assertions.assertEquals("Success", driver.findElement(By.id("success")).getText());
 
-		driver.get(baseURL + "/home");
+    driver.get(baseURL + "/home");
 
-		homePage.isCredentialDeleted();
-	}
+    homePage.isCredentialDeleted();
+  }
 
 }

@@ -40,13 +40,13 @@ public class HomePage {
   private WebDriver webDriver;
 
 
-  public HomePage(WebDriver webDriver,WebDriverWait wait){
+  public HomePage(WebDriver webDriver, WebDriverWait wait) {
     this.webDriver = webDriver;
     this.wait = wait;
-    PageFactory.initElements(webDriver,this);
+    PageFactory.initElements(webDriver, this);
   }
 
-  public void logout(){
+  public void logout() {
     logoutButton.click();
   }
 
@@ -72,7 +72,7 @@ public class HomePage {
     this.noteTab.click();
 
     List rows = webDriver.findElements(By.xpath("//*[@id='userTable']/tbody/tr"));
-    Assertions.assertEquals(0,rows.size());
+    Assertions.assertEquals(0, rows.size());
   }
 
   public void isNoteEdited() throws InterruptedException {
@@ -84,8 +84,8 @@ public class HomePage {
     noteTitle = this.webDriver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/th"));
     noteDescription = this.webDriver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/td[2]"));
 
-    Assertions.assertEquals("Tests",noteTitle.getText());
-    Assertions.assertEquals("Testing is fun! edited",noteDescription.getText());
+    Assertions.assertEquals("Tests", noteTitle.getText());
+    Assertions.assertEquals("Testing is fun! edited", noteDescription.getText());
   }
 
   public void isNoteVisible() throws InterruptedException {
@@ -97,8 +97,8 @@ public class HomePage {
     noteTitle = this.webDriver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/th"));
     noteDescription = this.webDriver.findElement(By.xpath("//*[@id='userTable']/tbody/tr/td[2]"));
 
-    Assertions.assertEquals("Test",noteTitle.getText());
-    Assertions.assertEquals("Testing is fun!",noteDescription.getText());
+    Assertions.assertEquals("Test", noteTitle.getText());
+    Assertions.assertEquals("Testing is fun!", noteDescription.getText());
 
   }
 
@@ -127,7 +127,7 @@ public class HomePage {
     deleteButton.click();
   }
 
-  public void createCredential(String url, String username,String password) throws InterruptedException {
+  public void createCredential(String url, String username, String password) throws InterruptedException {
     Thread.sleep(1000);
     this.credentialTab.click();
 
@@ -159,9 +159,9 @@ public class HomePage {
     credentialUsername = this.webDriver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[2]"));
     credentialPassword = this.webDriver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[3]"));
 
-    Assertions.assertEquals("rwilcox",credentialUsername.getText());
-    Assertions.assertEquals("www.google.com",credentialURL.getText());
-    Assertions.assertNotEquals("Password123",credentialPassword.getText());
+    Assertions.assertEquals("rwilcox", credentialUsername.getText());
+    Assertions.assertEquals("www.google.com", credentialURL.getText());
+    Assertions.assertNotEquals("Password123", credentialPassword.getText());
 
 
   }
@@ -184,7 +184,7 @@ public class HomePage {
 
     credentialPassword = webDriver.findElement(By.id("credential-password"));
 
-    Assertions.assertEquals("password123",credentialPassword.getAttribute("value"));
+    Assertions.assertEquals("password123", credentialPassword.getAttribute("value"));
 
     credentialPassword.clear();
     credentialPassword.sendKeys(password);
@@ -202,8 +202,8 @@ public class HomePage {
     credentialUsername = this.webDriver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[2]"));
     credentialPassword = this.webDriver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/td[3]"));
 
-    Assertions.assertEquals("ryan",credentialUsername.getText());
-    Assertions.assertEquals("www.yahoo.com",credentialURL.getText());
+    Assertions.assertEquals("ryan", credentialUsername.getText());
+    Assertions.assertEquals("www.yahoo.com", credentialURL.getText());
   }
 
   public void deleteCredential() throws InterruptedException {
@@ -219,7 +219,7 @@ public class HomePage {
     this.credentialTab.click();
 
     List rows = webDriver.findElements(By.xpath("//*[@id='credentialTable']/tbody/tr"));
-    Assertions.assertEquals(0,rows.size());
+    Assertions.assertEquals(0, rows.size());
 
   }
 }

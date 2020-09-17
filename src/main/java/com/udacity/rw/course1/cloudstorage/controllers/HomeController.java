@@ -26,37 +26,37 @@ public class HomeController {
   private FileService fileService;
 
   public HomeController(NoteService noteService, UserService userService,
-                        CredentialService credentialService,FileService fileService){
-     this.noteService = noteService;
-     this.userService = userService;
-     this.credentialService = credentialService;
-     this.fileService = fileService;
+                        CredentialService credentialService, FileService fileService) {
+    this.noteService = noteService;
+    this.userService = userService;
+    this.credentialService = credentialService;
+    this.fileService = fileService;
   }
 
   @GetMapping
-  public String displayHomePage(Authentication auth, Model model){
+  public String displayHomePage(Authentication auth, Model model) {
 
     int id = userService.getLoggedInUserId(auth);
 
     // a new note object must be added to the model
     Note note = new Note();
-    model.addAttribute("note",note);
+    model.addAttribute("note", note);
 
     // get all the notes for the current user
     List<Note> noteList = noteService.getAllNotes(id);
-    model.addAttribute("noteList",noteList);
+    model.addAttribute("noteList", noteList);
 
     // a new credential object must be added to the model
     Credential credential = new Credential();
-    model.addAttribute("credential",credential);
+    model.addAttribute("credential", credential);
 
     // get all the credentials for the current user
     List<Credential> credentialList = credentialService.getAllCredentials(id);
-    model.addAttribute("credentialList",credentialList);
+    model.addAttribute("credentialList", credentialList);
 
     // get all the files for the current user and then add it to the model.
     List<File> fileList = fileService.getAllFiles(id);
-    model.addAttribute("fileList",fileList);
+    model.addAttribute("fileList", fileList);
 
     return "home";
   }

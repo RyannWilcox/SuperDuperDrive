@@ -23,8 +23,8 @@ public class CredentialService {
     List<Credential> credentialList = credentialMapper.getAllCredentials(credentialId);
 
     // Need to grab the decrypted passwords because they may need to be displayed.
-    for(Credential credential : credentialList){
-      credential.setDecryptedPassword(encryptionService.decryptValue(credential.getPassword(),credential.getKey()));
+    for (Credential credential : credentialList) {
+      credential.setDecryptedPassword(encryptionService.decryptValue(credential.getPassword(), credential.getKey()));
     }
 
     return credentialList;
@@ -45,16 +45,15 @@ public class CredentialService {
     credential.setPassword(encryptedPassword);
     credential.setKey(encodedKey);
 
-    if(credential.getCredentialId() == null){
+    if (credential.getCredentialId() == null) {
       id = credentialMapper.insertCredential(credential);
-    }
-    else{ // an id exists so we are just editing an existing credential
+    } else { // an id exists so we are just editing an existing credential
       id = credentialMapper.updateCredential(credential);
     }
     return id;
   }
 
-  public void deleteCredential(int id){
+  public void deleteCredential(int id) {
     credentialMapper.deleteCredential(id);
   }
 

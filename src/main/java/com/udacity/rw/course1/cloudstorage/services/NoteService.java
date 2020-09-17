@@ -11,31 +11,27 @@ public class NoteService {
 
   private NoteMapper noteMapper;
 
-  public NoteService(NoteMapper noteMapper){
+  public NoteService(NoteMapper noteMapper) {
     this.noteMapper = noteMapper;
   }
 
-  public List<Note> getAllNotes(int userId){
+  public List<Note> getAllNotes(int userId) {
     return noteMapper.getAllNotes(userId);
   }
 
-  public int insertNote(Note note){
+  public int insertNote(Note note) {
     int id;
-    if(note.getNoteId() == null){
+    if (note.getNoteId() == null) {
       id = noteMapper.insertNote(note);
-    }
-    else{ // an existing note id means we just want to update a current note.
+    } else { // an existing note id means we just want to update a current note.
       id = noteMapper.updateNote(note);
     }
     return id;
   }
 
-  public void deleteNote(int id){
+  public void deleteNote(int id) {
     noteMapper.deleteNote(id);
   }
-
-
-
 
 
 }

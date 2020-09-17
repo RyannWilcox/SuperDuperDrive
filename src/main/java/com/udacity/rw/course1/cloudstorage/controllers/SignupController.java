@@ -19,12 +19,12 @@ public class SignupController {
   }
 
   @GetMapping
-  public String displaySignupPage(){
+  public String displaySignupPage() {
     return "signup";
   }
 
   @PostMapping
-  public String signupUser(User user, Model model){
+  public String signupUser(User user, Model model) {
     String signupError = null;
 
     if (!userService.isUsernameAvailable(user.getUsername())) {

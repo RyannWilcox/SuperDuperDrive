@@ -13,18 +13,19 @@ public class FileService {
 
   FileMapper fileMapper;
 
-  public FileService(FileMapper fileMapper){
+  public FileService(FileMapper fileMapper) {
     this.fileMapper = fileMapper;
   }
 
-  public File getFile(int fileId){
+  public File getFile(int fileId) {
     return fileMapper.getFile(fileId);
   }
-  public List<File> getAllFiles(int userId){
+
+  public List<File> getAllFiles(int userId) {
     return fileMapper.getAllFiles(userId);
   }
 
-  public int insertFile(MultipartFile fileUpload,int userId) throws IOException {
+  public int insertFile(MultipartFile fileUpload, int userId) throws IOException {
     File file = new File();
 
     file.setUserId(userId);
@@ -36,11 +37,11 @@ public class FileService {
     return fileMapper.insertFile(file);
   }
 
-  public void deleteFile(int fileId){
+  public void deleteFile(int fileId) {
     fileMapper.deleteFile(fileId);
   }
 
-  public boolean doesFileExist(MultipartFile fileUpload){
+  public boolean doesFileExist(MultipartFile fileUpload) {
     return fileMapper.getFileByFileName(fileUpload.getOriginalFilename()) != null;
   }
 }
